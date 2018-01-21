@@ -17,6 +17,8 @@ class GameWindow < Gosu::Window
     @b = -@background.height + 480
     @d = -@background.height * 2 + 480
     @true = false
+    @bulleta = 200
+    @bulletb = 200
   end
   
   def update
@@ -25,11 +27,23 @@ class GameWindow < Gosu::Window
    end
    if @b > 480
     @b = -@background.height
-   end    
+  end    
   @b +=2
   @d +=2
   collision
+end
+
+def draw
+  start_game
+  bullet
+end
+
+def bullet
+  if button_down?(Gosu::KbSpace)
+    Shoot.new.shoot(200,300, 4)
   end
+end 
+
 
 def collision
   if @x < 0
@@ -52,18 +66,13 @@ def collision
   end
 end
 
-
-def draw
-  start_game
-end
-
 def start_game
   @font.draw("Welcome to Stars of Rage!",210,140,0)
   @font.draw("Press space to start",230,160,0)
-  if button_down?(Gosu::KbSpace)
-    @true = true 
-  end
-  if @true == true
+  if button_down?(Gosu::KbLeft)
+    @true = true
+  end 
+  if @true == true 
     main
   end
 end
@@ -76,10 +85,31 @@ def main
 end
 
 def button_down(id)
-  if id == Gosu::KbEscape
+  case id
+  when Gosu::KbEscape
     close
-  end
+  end 
 end
+
+end
+
+class Shoot
+  attr_accessor :font, :shootx, :shooty
+  def initialize
+    @font = Gosu::Image.new('starfighter.bmp')
+    @shootx = 200
+    @shooty = 200
+  end
+
+  def update
+  end
+
+  def shoot(x,y,z)
+    @font.draw(x,y,z)
+    until x < 0 
+    x -= 2
+  end 
+  end 
 
 end
 
